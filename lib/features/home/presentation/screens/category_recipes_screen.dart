@@ -2,15 +2,15 @@ import 'package:app_2_mobile/core/constant.dart';
 import 'package:app_2_mobile/core/resources/color_manager.dart';
 import 'package:app_2_mobile/core/resources/font_manager.dart';
 import 'package:app_2_mobile/core/resources/styles_manager.dart';
-import 'package:app_2_mobile/core/resources/values_manager.dart';
+import 'package:app_2_mobile/core/widgets/empty_state_widget.dart';
+import 'package:app_2_mobile/core/widgets/error_state_widget.dart';
+import 'package:app_2_mobile/core/widgets/loading_indicator.dart';
 import 'package:app_2_mobile/features/home/data/data_sources/home_api_remote_data_source.dart';
 import 'package:app_2_mobile/features/home/data/models/cuisine_model.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
-import 'package:app_2_mobile/features/home/presentation/screens/recipe_detail_screen.dart';
-import 'package:app_2_mobile/features/home/presentation/widgets/recipe_card.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/recipe_grid_view.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryRecipesScreen extends StatefulWidget {
   final CuisineModel category;
@@ -75,82 +75,28 @@ class _CategoryRecipesScreenState extends State<CategoryRecipesScreen> {
   }
 
   Widget _buildBody() {
-    if (_isLoading) {
-      return Center(
-        child: CircularProgressIndicator(color: ColorManager.primary),
-      );
-    }
+    if (_isLoading) return const LoadingIndicator();
 
     if (_errorMessage != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error_outline, size: 48.sp, color: ColorManager.error),
-            SizedBox(height: Sizes.s16.h),
-            Text(
-              _errorMessage!,
-              style: getMediumStyle(color: ColorManager.error),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  _isLoading = true;
-                  _errorMessage = null;
-                });
-                _loadRecipes();
-              },
-              child: Text('Retry', style: TextStyle(color: ColorManager.primary)),
-            ),
-          ],
-        ),
+      return ErrorStateWidget(
+        message: _errorMessage!,
+        onRetry: () {
+          setState(() {
+            _isLoading = true;
+            _errorMessage = null;
+          });
+          _loadRecipes();
+        },
       );
     }
 
     if (_recipes.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.restaurant_menu,
-              size: 64.sp,
-              color: ColorManager.grey,
-            ),
-            SizedBox(height: Sizes.s16.h),
-            Text(
-              'No recipes found for ${widget.category.name}',
-              style: getMediumStyle(color: ColorManager.textSecondary),
-            ),
-          ],
-        ),
+      return EmptyStateWidget(
+        icon: Icons.restaurant_menu,
+        message: 'No recipes found for ${widget.category.name}',
       );
     }
 
-    return GridView.builder(
-      padding: EdgeInsets.all(Insets.s16.sp),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: Sizes.s16.w,
-        mainAxisSpacing: Sizes.s16.h,
-      ),
-      itemCount: _recipes.length,
-      itemBuilder: (context, index) {
-        return RecipeCard(
-          recipe: _recipes[index],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecipeDetailScreen(
-                  recipe: _recipes[index],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
+    return RecipeGridView(recipes: _recipes);
   }
 }

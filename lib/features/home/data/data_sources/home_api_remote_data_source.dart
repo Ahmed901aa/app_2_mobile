@@ -3,6 +3,7 @@ import 'package:app_2_mobile/features/home/data/data_sources/home_remote_data_so
 import 'package:app_2_mobile/features/home/data/models/categores_food/categores_food.dart';
 import 'package:app_2_mobile/features/home/data/models/cuisine_model.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
+import 'package:app_2_mobile/features/home/data/models/risepes_food/datum.dart';
 import 'package:app_2_mobile/features/home/data/models/risepes_food/risepes_food.dart';
 import 'package:dio/dio.dart';
 
@@ -38,10 +39,11 @@ class HomeApiRemoteDataSource implements HomeRemoteDataSource {
           difficulty: datum.difficulty ?? 'Easy',
           rating: 4.5,
           description: datum.description ?? '',
-          ingredients: [],
+          ingredients: datum.ingredients ?? [],
           categoryIds:
               datum.categories?.map((e) => e.id?.toString() ?? '').toList() ??
               [],
+          isFavorite: datum.isFavorite ?? false,
         );
       }).toList();
 
@@ -73,33 +75,31 @@ class HomeApiRemoteDataSource implements HomeRemoteDataSource {
         ApiConstants.getRecipeByIdEndpoint(id),
         options: Options(headers: {'X-API-Key': ApiConstants.apiKey}),
       );
-      // The API returns: { "data": { "recipe": {...} } }
-      final recipeData = response.data['data']['recipe'];
       
-      if (recipeData == null) {
+      final data = response.data['data'];
+      
+      if (data == null) {
         throw Exception('Recipe not found');
       }
 
+      final datum = Datum.fromJson(data);
+
       return RecipeModel(
-        id: recipeData['id']?.toString() ?? '',
-        title: recipeData['title'] ?? '',
-        image: ApiConstants.getFullImageUrl(recipeData['image_url']),
-        cookTime: recipeData['cook_time'] ?? 0,
-        difficulty: recipeData['difficulty'] ?? 'Easy',
-        rating: 4.5, // TODO: Get from reviews
-        description: recipeData['description'] ?? '',
-        ingredients: (recipeData['ingredients'] as List<dynamic>?)
-                ?.map((e) => e.toString())
-                .toList() ??
+        id: datum.id?.toString() ?? '',
+        title: datum.title ?? '',
+        image: ApiConstants.getFullImageUrl(datum.imageUrl),
+        cookTime: datum.cookTime ?? 0,
+        difficulty: datum.difficulty ?? 'Easy',
+        rating: 4.5,
+        description: datum.description ?? '',
+        ingredients: datum.ingredients ?? [],
+        categoryIds:
+            datum.categories?.map((e) => e.id?.toString() ?? '').toList() ??
             [],
-        categoryIds: (recipeData['categories'] as List<dynamic>?)
-                ?.map((e) => e['id']?.toString() ?? '')
-                .where((e) => e.isNotEmpty)
-                .toList() ??
-            [],
+        isFavorite: datum.isFavorite ?? false, // Mapped correctly
       );
     } catch (exception) {
-      throw Exception('Failed to get recipe details: $exception');
+      throw Exception('Failed to get recipe details');
     }
   }
 
@@ -133,6 +133,65 @@ class HomeApiRemoteDataSource implements HomeRemoteDataSource {
       }).toList();
     } catch (exception) {
       throw Exception('Failed to get categories: $exception');
+    }
+  }
+
+  @override
+  Future<List<RecipeModel>> getFavorites() async {
+    try {
+      final response = await _dio.get(
+        'favorites',
+        options: Options(headers: {'X-API-Key': ApiConstants.apiKey}),
+      );
+
+      final risepesFood = RisepesFood.fromJson(response.data);
+
+      if (risepesFood.data == null || risepesFood.data!.isEmpty) {
+        return [];
+      }
+
+      return risepesFood.data!.map((datum) {
+        return RecipeModel(
+          id: datum.id?.toString() ?? '',
+          title: datum.title ?? '',
+          image: ApiConstants.getFullImageUrl(datum.imageUrl),
+          cookTime: datum.cookTime ?? 0,
+          difficulty: datum.difficulty ?? 'Easy',
+          rating: 4.5,
+          description: datum.description ?? '',
+          ingredients: datum.ingredients ?? [],
+          categoryIds:
+              datum.categories?.map((e) => e.id?.toString() ?? '').toList() ??
+              [],
+          isFavorite: true,
+        );
+      }).toList();
+    } catch (exception) {
+      throw Exception('Failed to get favorites: $exception');
+    }
+  }
+
+  @override
+  Future<void> addFavorite(String id) async {
+    try {
+      await _dio.post(
+        'favorites/$id',
+        options: Options(headers: {'X-API-Key': ApiConstants.apiKey}),
+      );
+    } catch (exception) {
+      throw Exception('Failed to add favorite: $exception');
+    }
+  }
+
+  @override
+  Future<void> removeFavorite(String id) async {
+    try {
+      await _dio.delete(
+        'favorites/$id',
+        options: Options(headers: {'X-API-Key': ApiConstants.apiKey}),
+      );
+    } catch (exception) {
+      throw Exception('Failed to remove favorite: $exception');
     }
   }
 

@@ -4,10 +4,11 @@ import 'package:app_2_mobile/core/resources/color_manager.dart';
 import 'package:app_2_mobile/core/resources/font_manager.dart';
 import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/core/resources/values_manager.dart';
+import 'package:app_2_mobile/core/widgets/empty_state_widget.dart';
+import 'package:app_2_mobile/core/widgets/loading_indicator.dart';
 import 'package:app_2_mobile/features/home/data/data_sources/home_api_remote_data_source.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
-import 'package:app_2_mobile/features/home/presentation/screens/recipe_detail_screen.dart';
-import 'package:app_2_mobile/features/home/presentation/widgets/recipe_card.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/recipe_grid_view.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_search_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +33,6 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
     super.initState();
     final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
     _dataSource = HomeApiRemoteDataSource(dio);
-    // Focus the search bar immediately when screen opens
   }
 
   @override
@@ -44,7 +44,7 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
 
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
-    
+
     if (query.isEmpty) {
       setState(() {
         _recipes = [];
@@ -65,9 +65,7 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
           });
         }
       } catch (e) {
-        if (mounted) {
-          setState(() => _isLoading = false);
-        }
+        if (mounted) setState(() => _isLoading = false);
       }
     });
   }
@@ -99,62 +97,24 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
             onChanged: _onSearchChanged,
           ),
           SizedBox(height: Sizes.s16.h),
-          Expanded(
-            child: _isLoading
-                ? Center(
-                    child: CircularProgressIndicator(color: ColorManager.primary),
-                  )
-                : _recipes.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search,
-                              size: 64.sp,
-                              color: ColorManager.grey,
-                            ),
-                            SizedBox(height: Sizes.s16.h),
-                            Text(
-                              _searchController.text.isEmpty
-                                  ? 'Type to search recipes'
-                                  : 'No recipes found',
-                              style: getMediumStyle(
-                                color: ColorManager.grey,
-                                fontSize: FontSize.s16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : GridView.builder(
-                        padding: EdgeInsets.all(Insets.s16.w),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: Sizes.s16.h,
-                          crossAxisSpacing: Sizes.s12.w,
-                          childAspectRatio: 0.75,
-                        ),
-                        itemCount: _recipes.length,
-                        itemBuilder: (context, index) {
-                          return RecipeCard(
-                            recipe: _recipes[index],
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RecipeDetailScreen(
-                                    recipe: _recipes[index],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-          ),
+          Expanded(child: _buildBody()),
         ],
       ),
     );
+  }
+
+  Widget _buildBody() {
+    if (_isLoading) return const LoadingIndicator();
+
+    if (_recipes.isEmpty) {
+      return EmptyStateWidget(
+        icon: Icons.search,
+        message: _searchController.text.isEmpty
+            ? 'Type to search recipes'
+            : 'No recipes found',
+      );
+    }
+
+    return RecipeGridView(recipes: _recipes);
   }
 }

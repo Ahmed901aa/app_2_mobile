@@ -24,6 +24,8 @@ class Datum {
   final List<Category>? categories;
   final List<Cuisine>? cuisines;
   final List<dynamic>? dietaryTypes;
+  final List<String>? ingredients;
+  final bool? isFavorite;
 
   const Datum({
     this.id,
@@ -47,6 +49,8 @@ class Datum {
     this.categories,
     this.cuisines,
     this.dietaryTypes,
+    this.ingredients,
+    this.isFavorite,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -66,6 +70,7 @@ class Datum {
     isPremium: json['is_premium'] as bool?,
     isPublished: json['is_published'] as bool?,
     viewsCount: json['views_count'] as int?,
+    isFavorite: json['is_favorite'] as bool?,
     createdAt: json['created_at'] == null
         ? null
         : DateTime.parse(json['created_at'] as String),
@@ -79,6 +84,9 @@ class Datum {
         ?.map((e) => Cuisine.fromJson(e as Map<String, dynamic>))
         .toList(),
     dietaryTypes: json['dietary_types'] as List<dynamic>?,
+    ingredients: (json['ingredients'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -98,10 +106,12 @@ class Datum {
     'is_premium': isPremium,
     'is_published': isPublished,
     'views_count': viewsCount,
+    'is_favorite': isFavorite,
     'created_at': createdAt?.toIso8601String(),
     'updated_at': updatedAt?.toIso8601String(),
     'categories': categories?.map((e) => e.toJson()).toList(),
     'cuisines': cuisines?.map((e) => e.toJson()).toList(),
     'dietary_types': dietaryTypes,
+    'ingredients': ingredients,
   };
 }

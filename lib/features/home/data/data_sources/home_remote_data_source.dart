@@ -5,4 +5,7 @@ abstract class HomeRemoteDataSource {
   Future<List<RecipeModel>> getRecipes({int? categoryId, String? query});
   Future<RecipeModel> getRecipeById(String id);
   Future<List<CuisineModel>> getCuisines();
+  Future<List<RecipeModel>> getFavorites();
+  Future<void> addFavorite(String id);
+  Future<void> removeFavorite(String id);
 }

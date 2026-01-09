@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "823022469154",
+    "firebase_url": "https://recipes-fe238-default-rtdb.firebaseio.com",
+    "project_id": "recipes-fe238",
+    "storage_bucket": "recipes-fe238.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823022469154:android:b7e0c6af361d74212a4a7b",
+        "android_client_info": {
+          "package_name": "com.example.app_2_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtLGyBd1GYtdxDo7I8LH1kAywUJXyCkIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823022469154:android:5a0a5da2e63eaef42a4a7b",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtLGyBd1GYtdxDo7I8LH1kAywUJXyCkIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

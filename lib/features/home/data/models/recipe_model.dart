@@ -9,6 +9,8 @@ class RecipeModel {
   final List<String> ingredients;
   final List<String> categoryIds;
 
+  final bool isFavorite;
+
   const RecipeModel({
     required this.id,
     required this.title,
@@ -19,6 +21,7 @@ class RecipeModel {
     required this.description,
     required this.ingredients,
     required this.categoryIds,
+    this.isFavorite = false,
   });
 
   factory RecipeModel.fromJson(Map<String, dynamic> json) => RecipeModel(
@@ -40,5 +43,6 @@ class RecipeModel {
             .where((e) => e.isNotEmpty)
             .toList() ??
         [],
+    isFavorite: json['is_favorite'] as bool? ?? false,
   );
 }
