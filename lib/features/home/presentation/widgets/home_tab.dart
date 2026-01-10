@@ -147,25 +147,31 @@ class HomeTab extends StatelessWidget {
       return _buildEmptyState();
     }
 
-    return SizedBox(
-      height: 280.h,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: Insets.s16.w),
-        itemCount: recipes.length,
-        itemBuilder: (_, index) => RecipeCard(
-          recipe: recipes[index],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RecipeDetailScreen(
-                  recipe: recipes[index],
-                ),
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      padding: EdgeInsets.symmetric(horizontal: Insets.s16.w),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.65, // Adjusted to prevent overflow
+        crossAxisSpacing: Sizes.s12.w,
+        mainAxisSpacing: Sizes.s12.h,
+      ),
+      itemCount: recipes.length,
+      itemBuilder: (_, index) => RecipeCard(
+        recipe: recipes[index],
+        width: double.infinity, // Grid controls width, but this ensures internal container fills it
+        margin: EdgeInsets.zero, // Grid handles spacing
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RecipeDetailScreen(
+                recipe: recipes[index],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

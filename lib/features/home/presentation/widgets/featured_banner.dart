@@ -115,22 +115,29 @@ class _FeaturedBannerState extends State<FeaturedBanner>
                       child: child,
                     );
                   },
-                  child: CachedNetworkImage(
-                    imageUrl: widget.items[_currentIndex].imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                    placeholder: (context, url) => Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: ColorManager.primary,
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Icon(
-                      Icons.error,
-                      color: ColorManager.error,
-                    ),
-                  ),
+                  child: widget.items[_currentIndex].imageUrl.startsWith('http')
+                      ? CachedNetworkImage(
+                          imageUrl: widget.items[_currentIndex].imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: ColorManager.primary,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Icon(
+                            Icons.error,
+                            color: ColorManager.error,
+                          ),
+                        )
+                      : Image.asset(
+                          widget.items[_currentIndex].imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
                 ),
               ),
               Container(

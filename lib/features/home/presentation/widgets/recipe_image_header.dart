@@ -135,15 +135,7 @@ class _RecipeImageHeaderState extends State<RecipeImageHeader> {
                   : CachedNetworkImage(
                       imageUrl: widget.recipe.image,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: ColorManager.lightGrey,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: ColorManager.primary,
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      ),
+                      placeholder: (context, url) => _buildPlaceholder(),
                       errorWidget: (context, url, error) => _buildPlaceholder(),
                     ),
             ),
@@ -156,22 +148,10 @@ class _RecipeImageHeaderState extends State<RecipeImageHeader> {
 
   Widget _buildPlaceholder() {
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            ColorManager.primary.withValues(alpha: 0.7),
-            ColorManager.primary,
-          ],
-        ),
-      ),
-      child: Center(
-        child: Icon(
-          Icons.restaurant_menu_rounded,
-          size: 80.sp,
-          color: ColorManager.white,
-        ),
+      color: ColorManager.lightGrey,
+      child: Image.asset(
+        'assets/images/dog_chef_placeholder.png',
+        fit: BoxFit.cover,
       ),
     );
   }

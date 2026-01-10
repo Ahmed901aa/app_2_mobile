@@ -10,16 +10,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class RecipeCard extends StatelessWidget {
   final RecipeModel recipe;
   final VoidCallback? onTap;
+  final double? width;
+  final EdgeInsetsGeometry? margin;
 
-  const RecipeCard({super.key, required this.recipe, this.onTap});
+  const RecipeCard({
+    super.key,
+    required this.recipe,
+    this.onTap,
+    this.width,
+    this.margin,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 180.w,
-        margin: EdgeInsets.only(right: Insets.s12.w, bottom: 8.h), // Added bottom margin for shadow
+        width: width ?? 180.w,
+        margin: margin ?? EdgeInsets.only(right: Insets.s12.w, bottom: 8.h), // Added bottom margin for shadow
         decoration: BoxDecoration(
           color: ColorManager.white,
           borderRadius: BorderRadius.circular(20.r),
@@ -53,16 +61,7 @@ class RecipeCard extends StatelessWidget {
                           height: 140.h, // Increased height slightly
                           width: double.infinity,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            height: 140.h,
-                            color: ColorManager.lightGrey,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: ColorManager.primary,
-                                strokeWidth: 2,
-                              ),
-                            ),
-                          ),
+                          placeholder: (context, url) => _buildPlaceholderImage(),
                           errorWidget: (context, url, error) => _buildPlaceholderImage(),
                         ),
                 ),
@@ -169,22 +168,10 @@ class RecipeCard extends StatelessWidget {
   Widget _buildPlaceholderImage() {
     return Container(
       height: 140.h,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            ColorManager.primary.withValues(alpha: 0.7),
-            ColorManager.primary,
-          ],
-        ),
-      ),
-      child: Center(
-        child: Icon(
-          Icons.restaurant_menu_rounded,
-          size: 40.sp,
-          color: ColorManager.white,
-        ),
+      color: ColorManager.lightGrey, // Background color while asset loads
+      child: Image.asset(
+        'assets/images/dog_chef_placeholder.png',
+        fit: BoxFit.cover,
       ),
     );
   }

@@ -30,20 +30,17 @@ class DefaultHomeData {
       BannerItem(
         title: 'Fresh Salads',
         subtitle: 'Healthy & Green',
-        imageUrl:
-            'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80',
+        imageUrl: 'assets/images/banner_salad.png',
       ),
       BannerItem(
         title: 'Premium Steaks',
         subtitle: 'Grilled to Perfection',
-        imageUrl:
-            'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=800&q=80',
+        imageUrl: 'assets/images/banner_steak.png',
       ),
       BannerItem(
         title: 'Sweet Delights',
         subtitle: 'Taste the Magic',
-        imageUrl:
-            'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800&q=80',
+        imageUrl: 'assets/images/banner_dessert.png',
       ),
     ];
   }
