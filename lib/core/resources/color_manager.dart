@@ -14,4 +14,5 @@ class ColorManager {
   static Color starRate = const Color(0xFFFFC107);
   static Color transparent = Colors.transparent;
   static Color error = const Color(0xFFD32F2F);
+  static Color success = const Color(0xFF43A047);
 }
