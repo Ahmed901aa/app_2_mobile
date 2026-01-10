@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:app_2_mobile/features/auth/presentation/screens/login_screen.dart';
+import 'package:app_2_mobile/features/splash/presentation/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: ColorManager.primary),
             useMaterial3: true,
           ),
-          home: const LoginScreen(),
+          home: const SplashScreen(),
         );
       },
     );

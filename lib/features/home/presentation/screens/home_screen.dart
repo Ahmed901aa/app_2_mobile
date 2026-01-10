@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.background,
+      backgroundColor: Colors.grey[50],
       appBar: _buildAppBar(),
       body: _buildBody(),
       bottomNavigationBar: _buildBottomNav(),
@@ -64,20 +64,20 @@ class _HomeScreenState extends State<HomeScreen> {
   PreferredSizeWidget _buildAppBar() {
     final titles = ['Recipe Hub', 'Category', 'Favorites', 'Profile'];
     return AppBar(
-      backgroundColor: ColorManager.white,
+      backgroundColor: ColorManager.primary,
       elevation: 0,
       title: Row(
         children: [
           Icon(
             Icons.restaurant_menu,
-            color: ColorManager.primary,
+            color: ColorManager.white,
             size: 28.sp,
           ),
           SizedBox(width: 8.w),
           Text(
             titles[_currentIndex],
             style: getBoldStyle(
-              color: ColorManager.primary,
+              color: ColorManager.white,
               fontSize: FontSize.s24,
             ),
           ),
@@ -114,8 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
       currentIndex: _currentIndex,
       onTap: (index) => setState(() => _currentIndex = index),
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: ColorManager.primary,
-      unselectedItemColor: ColorManager.grey,
+      backgroundColor: ColorManager.primary,
+      selectedItemColor: ColorManager.white,
+      unselectedItemColor: Colors.white60,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(

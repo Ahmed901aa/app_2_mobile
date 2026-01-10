@@ -1,10 +1,10 @@
 import 'package:app_2_mobile/core/resources/font_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 TextStyle _getTextStyle(double fontSize, FontWeight fontWeight, Color color) =>
-    TextStyle(
+    GoogleFonts.poppins(
       fontSize: fontSize,
-      fontFamily: FontConstants.fontFamily,
       color: color,
       fontWeight: fontWeight,
     );

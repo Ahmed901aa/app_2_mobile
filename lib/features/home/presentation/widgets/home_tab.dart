@@ -79,35 +79,48 @@ class HomeTab extends StatelessWidget {
     bool showViewAll = false,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Insets.s16.w),
+      padding: EdgeInsets.fromLTRB(Insets.s16.w, Insets.s8.h, Insets.s16.w, Insets.s12.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: icon == Icons.local_fire_department
-                    ? ColorManager.primary
-                    : ColorManager.text,
-                size: 24.sp,
+              Container(
+                padding: EdgeInsets.all(6.sp),
+                decoration: BoxDecoration(
+                  color: ColorManager.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Icon(
+                  icon,
+                  color: ColorManager.primary,
+                  size: 20.sp,
+                ),
               ),
-              SizedBox(width: Sizes.s8.w),
+              SizedBox(width: Sizes.s12.w),
               Text(
                 title,
-                style: getBoldStyle(
+                style: getSemiBoldStyle(
                   color: ColorManager.text,
-                  fontSize: FontSize.s20,
+                  fontSize: FontSize.s18,
                 ),
               ),
             ],
           ),
           if (showViewAll)
-            Text(
-              'View All',
-              style: getMediumStyle(
-                color: ColorManager.primary,
-                fontSize: FontSize.s14,
+            TextButton(
+              onPressed: () {}, // Add functionality if needed
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: Text(
+                'View All',
+                style: getMediumStyle(
+                  color: ColorManager.primary,
+                  fontSize: FontSize.s14,
+                ),
               ),
             ),
         ],

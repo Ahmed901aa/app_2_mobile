@@ -88,7 +88,7 @@ class _RecipeImageHeaderState extends State<RecipeImageHeader> {
     return SliverAppBar(
       expandedHeight: 320.h,
       pinned: true,
-      backgroundColor: ColorManager.white,
+      backgroundColor: ColorManager.primary,
       leading: Container(
         margin: EdgeInsets.all(8.sp),
         decoration: BoxDecoration(
