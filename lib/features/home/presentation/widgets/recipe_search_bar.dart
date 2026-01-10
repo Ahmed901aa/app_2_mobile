@@ -24,6 +24,10 @@ class RecipeSearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: ColorManager.white,
         borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: ColorManager.primary,
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
