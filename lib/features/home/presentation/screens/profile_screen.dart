@@ -1,9 +1,8 @@
-import 'package:app_2_mobile/core/resources/color_manager.dart';
-import 'package:app_2_mobile/core/resources/font_manager.dart';
-import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/core/resources/values_manager.dart';
-import 'package:app_2_mobile/features/auth/presentation/screens/login_screen.dart';
+import 'package:app_2_mobile/features/home/data/services/profile_service.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_avatar.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_logout_button.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_save_button.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,47 +37,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _updateProfile() async {
-    if (!_formKey.currentState!.validate()) return;
-    if (_user == null) return;
+    if (!_formKey.currentState!.validate() || _user == null) return;
 
     setState(() => _isLoading = true);
-
     try {
-      await _user!.updateDisplayName(_nameController.text.trim());
-      await _user!.reload();
+      await ProfileService.updateProfile(context, _user!, _nameController.text);
       _user = FirebaseAuth.instance.currentUser;
-      
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Profile updated successfully', style: getRegularStyle(color: ColorManager.white)),
-            backgroundColor: ColorManager.success,
-          ),
-        );
-      }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to update profile: $e', style: getRegularStyle(color: ColorManager.white)),
-            backgroundColor: ColorManager.error,
-          ),
-        );
-      }
+      ProfileService.showError(context, e.toString());
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
-
-  Future<void> _logout() async {
-    await FirebaseAuth.instance.signOut();
-    if (mounted) {
-      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-        (route) => false,
-      );
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -100,12 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 controller: _nameController,
                 label: 'Full Name',
                 icon: Icons.person_outline,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
-                  }
-                  return null;
-                },
+                validator: (value) =>
+                    value?.isEmpty ?? true ? 'Please enter your name' : null,
               ),
               SizedBox(height: Sizes.s20.h),
               ProfileTextField(
@@ -115,53 +79,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 readOnly: true,
               ),
               SizedBox(height: Sizes.s40.h),
-              _buildSaveButton(),
+              ProfileSaveButton(
+                isLoading: _isLoading,
+                onPressed: _updateProfile,
+              ),
               SizedBox(height: Sizes.s20.h),
-              _buildLogoutButton(),
+              ProfileLogoutButton(
+                onPressed: () => ProfileService.logout(context),
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildSaveButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 50.h,
-      child: ElevatedButton(
-        onPressed: _isLoading ? null : _updateProfile,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: ColorManager.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          elevation: 0,
-        ),
-        child: _isLoading
-            ? SizedBox(
-                height: 20.h,
-                width: 20.h,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: ColorManager.white,
-                ),
-              )
-            : Text(
-                'Save Changes',
-                style: getBoldStyle(color: ColorManager.white, fontSize: FontSize.s16),
-              ),
-      ),
-    );
-  }
-
-  Widget _buildLogoutButton() {
-    return TextButton.icon(
-      onPressed: _logout,
-      icon: Icon(Icons.logout, color: ColorManager.error),
-      label: Text(
-        'Logout',
-        style: getMediumStyle(color: ColorManager.error, fontSize: FontSize.s16),
       ),
     );
   }
