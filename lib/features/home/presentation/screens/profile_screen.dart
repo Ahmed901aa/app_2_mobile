@@ -3,6 +3,8 @@ import 'package:app_2_mobile/core/resources/font_manager.dart';
 import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/core/resources/values_manager.dart';
 import 'package:app_2_mobile/features/auth/presentation/screens/login_screen.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_avatar.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -71,13 +73,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout() async {
-      await FirebaseAuth.instance.signOut();
-      if (mounted) {
-         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-          (route) => false,
-        );
-      }
+    await FirebaseAuth.instance.signOut();
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false,
+      );
+    }
   }
 
   @override
@@ -92,44 +94,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: Sizes.s20.h),
-              Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 120.w,
-                      height: 120.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: ColorManager.lightGrey,
-                        image: const DecorationImage(
-                          image: AssetImage('assets/images/dog_chef_placeholder.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        border: Border.all(color: ColorManager.primary, width: 2),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(8.sp),
-                        decoration: BoxDecoration(
-                          color: ColorManager.primary,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: Icon(
-                          Icons.camera_alt,
-                          color: Colors.white,
-                          size: 20.sp,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const Center(child: ProfileAvatar()),
               SizedBox(height: Sizes.s40.h),
-              _buildTextField(
+              ProfileTextField(
                 controller: _nameController,
                 label: 'Full Name',
                 icon: Icons.person_outline,
@@ -141,49 +108,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
               SizedBox(height: Sizes.s20.h),
-              _buildTextField(
+              ProfileTextField(
                 controller: _emailController,
                 label: 'Email Address',
                 icon: Icons.email_outlined,
                 readOnly: true,
               ),
               SizedBox(height: Sizes.s40.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _updateProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorManager.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: _isLoading
-                      ? SizedBox(
-                          height: 20.h,
-                          width: 20.h,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: ColorManager.white,
-                          ),
-                        )
-                      : Text(
-                          'Save Changes',
-                          style: getBoldStyle(color: ColorManager.white, fontSize: FontSize.s16),
-                        ),
-                ),
-              ),
-               SizedBox(height: Sizes.s20.h),
-               TextButton.icon(
-                onPressed: _logout,
-                icon: Icon(Icons.logout, color: ColorManager.error),
-                label: Text(
-                  'Logout', 
-                  style: getMediumStyle(color: ColorManager.error, fontSize: FontSize.s16),
-                ),
-              ),
+              _buildSaveButton(),
+              SizedBox(height: Sizes.s20.h),
+              _buildLogoutButton(),
             ],
           ),
         ),
@@ -191,48 +125,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    bool readOnly = false,
-    String? Function(String?)? validator,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: getMediumStyle(color: ColorManager.text, fontSize: FontSize.s14),
-        ),
-        SizedBox(height: Sizes.s8.h),
-        TextFormField(
-          controller: controller,
-          readOnly: readOnly,
-          validator: validator,
-          style: getRegularStyle(color: ColorManager.text, fontSize: FontSize.s16),
-          decoration: InputDecoration(
-            hintText: 'Enter your $label',
-            hintStyle: getRegularStyle(color: ColorManager.grey, fontSize: FontSize.s14),
-            prefixIcon: Icon(icon, color: ColorManager.primary),
-            filled: true,
-            fillColor: readOnly ? ColorManager.lightGrey.withValues(alpha: 0.3) : ColorManager.white,
-            contentPadding: EdgeInsets.symmetric(horizontal: Insets.s16.w, vertical: Insets.s16.h),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: ColorManager.lightGrey),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: ColorManager.lightGrey),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: ColorManager.primary),
-            ),
+  Widget _buildSaveButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 50.h,
+      child: ElevatedButton(
+        onPressed: _isLoading ? null : _updateProfile,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: ColorManager.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
           ),
+          elevation: 0,
         ),
-      ],
+        child: _isLoading
+            ? SizedBox(
+                height: 20.h,
+                width: 20.h,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: ColorManager.white,
+                ),
+              )
+            : Text(
+                'Save Changes',
+                style: getBoldStyle(color: ColorManager.white, fontSize: FontSize.s16),
+              ),
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton() {
+    return TextButton.icon(
+      onPressed: _logout,
+      icon: Icon(Icons.logout, color: ColorManager.error),
+      label: Text(
+        'Logout',
+        style: getMediumStyle(color: ColorManager.error, fontSize: FontSize.s16),
+      ),
     );
   }
 

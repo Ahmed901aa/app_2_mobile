@@ -1,16 +1,13 @@
-import 'package:app_2_mobile/core/resources/color_manager.dart';
-import 'package:app_2_mobile/core/resources/font_manager.dart';
-import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/core/resources/values_manager.dart';
+import 'package:app_2_mobile/core/widgets/section_header.dart';
 import 'package:app_2_mobile/features/home/data/default_data.dart';
 import 'package:app_2_mobile/features/home/data/models/cuisine_model.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
-import 'package:app_2_mobile/features/home/presentation/screens/category_recipes_screen.dart';
-import 'package:app_2_mobile/features/home/presentation/screens/recipe_detail_screen.dart';
 import 'package:app_2_mobile/features/home/presentation/screens/search_recipes_screen.dart';
-import 'package:app_2_mobile/features/home/presentation/widgets/cuisine_card.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/featured_banner.dart';
-import 'package:app_2_mobile/features/home/presentation/widgets/recipe_card.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/home/cuisines_list.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/home/empty_recipes_state.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/home/trending_recipes_grid.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,8 +29,6 @@ class HomeTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: Sizes.s16.h),
-
-          // Search Bar
           RecipeSearchBar(
             onTap: () {
               Navigator.push(
@@ -44,173 +39,29 @@ class HomeTab extends StatelessWidget {
               );
             },
           ),
-
-          // Featured Banner
           FeaturedBanner(items: DefaultHomeData.getDefaultBanners()),
-
-          // Shop by Cuisine Section
-          _buildSectionHeader(
+          const SectionHeader(
             icon: Icons.public,
             title: 'Shop by Cuisine',
           ),
           SizedBox(height: Sizes.s12.h),
-          _buildCuisinesList(context),
-
+          CuisinesList(
+            cuisines: cuisines.isEmpty 
+                ? DefaultHomeData.getDefaultCuisines() 
+                : cuisines,
+          ),
           SizedBox(height: Sizes.s24.h),
-
-          // Trending Now Section
-          _buildSectionHeader(
+          const SectionHeader(
             icon: Icons.local_fire_department,
             title: 'Trending Now',
             showViewAll: true,
           ),
           SizedBox(height: Sizes.s12.h),
-          _buildRecipesList(context),
-
+          recipes.isEmpty 
+              ? const EmptyRecipesState() 
+              : TrendingRecipesGrid(recipes: recipes),
           SizedBox(height: Sizes.s24.h),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader({
-    required IconData icon,
-    required String title,
-    bool showViewAll = false,
-  }) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(Insets.s16.w, Insets.s8.h, Insets.s16.w, Insets.s12.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(6.sp),
-                decoration: BoxDecoration(
-                  color: ColorManager.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Icon(
-                  icon,
-                  color: ColorManager.primary,
-                  size: 20.sp,
-                ),
-              ),
-              SizedBox(width: Sizes.s12.w),
-              Text(
-                title,
-                style: getSemiBoldStyle(
-                  color: ColorManager.text,
-                  fontSize: FontSize.s18,
-                ),
-              ),
-            ],
-          ),
-          if (showViewAll)
-            TextButton(
-              onPressed: () {}, // Add functionality if needed
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: Text(
-                'View All',
-                style: getMediumStyle(
-                  color: ColorManager.primary,
-                  fontSize: FontSize.s14,
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCuisinesList(BuildContext context) {
-    final displayCuisines =
-        cuisines.isEmpty ? DefaultHomeData.getDefaultCuisines() : cuisines;
-
-    return SizedBox(
-      height: 60.h,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: Insets.s16.w),
-        itemCount: displayCuisines.length,
-        itemBuilder: (_, index) => CuisineCard(
-          cuisine: displayCuisines[index],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CategoryRecipesScreen(
-                  category: displayCuisines[index],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRecipesList(BuildContext context) {
-    if (recipes.isEmpty) {
-      return _buildEmptyState();
-    }
-
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      padding: EdgeInsets.symmetric(horizontal: Insets.s16.w),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.65, // Adjusted to prevent overflow
-        crossAxisSpacing: Sizes.s12.w,
-        mainAxisSpacing: Sizes.s12.h,
-      ),
-      itemCount: recipes.length,
-      itemBuilder: (_, index) => RecipeCard(
-        recipe: recipes[index],
-        width: double.infinity, // Grid controls width, but this ensures internal container fills it
-        margin: EdgeInsets.zero, // Grid handles spacing
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RecipeDetailScreen(
-                recipe: recipes[index],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(Insets.s24.sp),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.restaurant_menu,
-              size: 48.sp,
-              color: ColorManager.grey,
-            ),
-            SizedBox(height: Sizes.s12.h),
-            Text(
-              'No recipes available',
-              style: getMediumStyle(
-                color: ColorManager.textSecondary,
-                fontSize: FontSize.s14,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -1,10 +1,9 @@
 import 'package:app_2_mobile/core/resources/color_manager.dart';
-import 'package:app_2_mobile/core/resources/font_manager.dart';
-import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/core/resources/values_manager.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/banner/banner_content.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/banner/banner_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:async';
 
 class BannerItem {
@@ -76,6 +75,8 @@ class _FeaturedBannerState extends State<FeaturedBanner>
   Widget build(BuildContext context) {
     if (widget.items.isEmpty) return const SizedBox.shrink();
     
+    final currentItem = widget.items[_currentIndex];
+    
     return GestureDetector(
       onTap: () => widget.onTap?.call(_currentIndex),
       child: Container(
@@ -97,47 +98,10 @@ class _FeaturedBannerState extends State<FeaturedBanner>
                 duration: const Duration(milliseconds: 800),
                 switchInCurve: Curves.easeIn,
                 switchOutCurve: Curves.easeOut,
-                layoutBuilder: (currentChild, previousChildren) {
-                  return Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      ...previousChildren,
-                      if (currentChild != null) currentChild,
-                    ],
-                  );
-                },
-                child: AnimatedBuilder(
-                  key: ValueKey<String>(widget.items[_currentIndex].imageUrl),
-                  animation: _scaleAnimation,
-                  builder: (context, child) {
-                    return Transform.scale(
-                      scale: _scaleAnimation.value,
-                      child: child,
-                    );
-                  },
-                  child: widget.items[_currentIndex].imageUrl.startsWith('http')
-                      ? CachedNetworkImage(
-                          imageUrl: widget.items[_currentIndex].imageUrl,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                          placeholder: (context, url) => Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: ColorManager.primary,
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.error,
-                            color: ColorManager.error,
-                          ),
-                        )
-                      : Image.asset(
-                          widget.items[_currentIndex].imageUrl,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: double.infinity,
-                        ),
+                child: BannerImage(
+                  key: ValueKey<String>(currentItem.imageUrl),
+                  imageUrl: currentItem.imageUrl,
+                  scaleAnimation: _scaleAnimation,
                 ),
               ),
               Container(
@@ -152,32 +116,12 @@ class _FeaturedBannerState extends State<FeaturedBanner>
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(Insets.s20.sp),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 600),
-                  child: Column(
-                    key: ValueKey<String>(widget.items[_currentIndex].title),
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.items[_currentIndex].title,
-                        style: getBoldStyle(
-                          color: ColorManager.white,
-                          fontSize: FontSize.s24,
-                        ),
-                      ),
-                      SizedBox(height: Sizes.s4.h),
-                      Text(
-                        widget.items[_currentIndex].subtitle,
-                        style: getRegularStyle(
-                          color: ColorManager.white,
-                          fontSize: FontSize.s16,
-                        ),
-                      ),
-                    ],
-                  ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 600),
+                child: BannerContent(
+                  key: ValueKey<String>(currentItem.title),
+                  title: currentItem.title,
+                  subtitle: currentItem.subtitle,
                 ),
               ),
             ],
