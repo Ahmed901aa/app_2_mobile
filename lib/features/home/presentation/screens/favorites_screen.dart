@@ -71,21 +71,20 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          'Deleted',
+          'Removed successfully',
+          textAlign: TextAlign.center,
           style: getRegularStyle(color: ColorManager.white),
         ),
         backgroundColor: ColorManager.success,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
-        margin: EdgeInsets.only(
-          bottom: 80.h,
-          left: 16.w,
-          right: 16.w,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.r),
         ),
-        action: SnackBarAction(
-          label: 'Undo',
-          textColor: ColorManager.white,
-          onPressed: () => _undoRemove(recipe),
+        margin: EdgeInsets.only(
+          bottom: 20.h,
+          left: 50.w,
+          right: 50.w,
         ),
       ),
     );
@@ -103,18 +102,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 
-  Future<void> _undoRemove(RecipeModel recipe) async {
-    try {
-      await _dataSource.addFavorite(recipe.id.toString());
-      if (mounted) {
-        setState(() {
-          _favorites.add(recipe);
-        });
-      }
-    } catch (e) {
-      debugPrint('Error re-adding favorite: $e');
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
