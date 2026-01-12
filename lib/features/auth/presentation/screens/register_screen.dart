@@ -1,8 +1,10 @@
 import 'package:app_2_mobile/core/resources/color_manager.dart';
-import 'package:app_2_mobile/features/auth/data/dual_auth_service.dart';
+import 'package:app_2_mobile/core/resources/font_manager.dart';
+import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/features/auth/presentation/widgets/auth_footer.dart';
-import 'package:app_2_mobile/features/auth/presentation/widgets/auth_hero_section.dart';
+import 'package:app_2_mobile/features/auth/presentation/widgets/auth_illustration.dart';
 import 'package:app_2_mobile/features/auth/presentation/widgets/register_form.dart';
+import 'package:app_2_mobile/features/auth/data/dual_auth_service.dart';
 import 'package:app_2_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,50 +60,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.background,
+      backgroundColor: ColorManager.white,
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AuthHeroSection(
-                title: 'Sign Up',
-                subtitle: 'Create account and start your journey',
-                imagePath: 'assets/images/register_classic.jpg',
-              ),
-              Transform.translate(
-                offset: Offset(0, -20.h),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: ColorManager.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.r),
-                      topRight: Radius.circular(30.r),
-                    ),
-                  ),
-                  padding: EdgeInsets.all(24.sp),
-                  child: Column(
-                    children: [
-                      RegisterForm(
-                        formKey: _formKey,
-                        nameController: _nameController,
-                        emailController: _emailController,
-                        passwordController: _passwordController,
-                        isPasswordVisible: _isPasswordVisible,
-                        onVisibilityToggle: () =>
-                            setState(() => _isPasswordVisible = !_isPasswordVisible),
-                        onRegister: _handleRegister,
-                        isLoading: _isLoading,
-                      ),
-                      SizedBox(height: 24.h),
-                      AuthFooter(
-                        question: 'Already have an account? ',
-                        actionText: 'Sign In',
-                        onActionTap: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
+              const AuthIllustration(),
+              Text(
+                'Get Started',
+                style: getBoldStyle(
+                  color: ColorManager.text,
+                  fontSize: FontSize.s28,
                 ),
               ),
+              SizedBox(height: 8.h),
+              Text(
+                'Sign up to create your account',
+                style: getRegularStyle(
+                  color: ColorManager.textSecondary,
+                  fontSize: FontSize.s16,
+                ),
+              ),
+              SizedBox(height: 32.h),
+              RegisterForm(
+                formKey: _formKey,
+                nameController: _nameController,
+                emailController: _emailController,
+                passwordController: _passwordController,
+                isPasswordVisible: _isPasswordVisible,
+                onVisibilityToggle: () =>
+                    setState(() => _isPasswordVisible = !_isPasswordVisible),
+                onRegister: _handleRegister,
+                isLoading: _isLoading,
+              ),
+              SizedBox(height: 24.h),
+              AuthFooter(
+                question: 'Already have an account? ',
+                actionText: 'Sign In',
+                onActionTap: () => Navigator.pop(context),
+              ),
+              SizedBox(height: 24.h),
             ],
           ),
         ),

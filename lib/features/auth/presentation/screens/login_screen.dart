@@ -1,8 +1,10 @@
 import 'package:app_2_mobile/core/resources/color_manager.dart';
-import 'package:app_2_mobile/features/auth/data/dual_auth_service.dart';
+import 'package:app_2_mobile/core/resources/font_manager.dart';
+import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/features/auth/presentation/widgets/auth_footer.dart';
-import 'package:app_2_mobile/features/auth/presentation/widgets/auth_hero_section.dart';
+import 'package:app_2_mobile/features/auth/presentation/widgets/auth_illustration.dart';
 import 'package:app_2_mobile/features/auth/presentation/widgets/login_form.dart';
+import 'package:app_2_mobile/features/auth/data/dual_auth_service.dart';
 import 'package:app_2_mobile/features/auth/presentation/screens/register_screen.dart';
 import 'package:app_2_mobile/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -56,52 +58,50 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.background,
+      backgroundColor: ColorManager.white,
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const AuthHeroSection(
-                title: 'Sign In',
-                subtitle: 'Hi! Welcome back, you\'ve been missed',
-                imagePath: 'assets/images/login_classic.jpg',
-              ),
-              Transform.translate(
-                offset: Offset(0, -20.h),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: ColorManager.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.r),
-                      topRight: Radius.circular(30.r),
-                    ),
-                  ),
-                  padding: EdgeInsets.all(24.sp),
-                  child: Column(
-                    children: [
-                      LoginForm(
-                        formKey: _formKey,
-                        emailController: _emailController,
-                        passwordController: _passwordController,
-                        isPasswordVisible: _isPasswordVisible,
-                        onVisibilityToggle: () =>
-                            setState(() => _isPasswordVisible = !_isPasswordVisible),
-                        onLogin: _handleLogin,
-                        isLoading: _isLoading,
-                      ),
-                      SizedBox(height: 24.h),
-                      AuthFooter(
-                        question: 'Don\'t have an account? ',
-                        actionText: 'Sign Up',
-                        onActionTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                        ),
-                      ),
-                    ],
-                  ),
+              const AuthIllustration(),
+              Text(
+                'Welcome back',
+                style: getBoldStyle(
+                  color: ColorManager.text,
+                  fontSize: FontSize.s28,
                 ),
               ),
+              SizedBox(height: 8.h),
+              Text(
+                'Sign in to access your account',
+                style: getRegularStyle(
+                  color: ColorManager.textSecondary,
+                  fontSize: FontSize.s16,
+                ),
+              ),
+              SizedBox(height: 32.h),
+              LoginForm(
+                formKey: _formKey,
+                emailController: _emailController,
+                passwordController: _passwordController,
+                isPasswordVisible: _isPasswordVisible,
+                onVisibilityToggle: () =>
+                    setState(() => _isPasswordVisible = !_isPasswordVisible),
+                onLogin: _handleLogin,
+                isLoading: _isLoading,
+              ),
+              SizedBox(height: 24.h),
+              AuthFooter(
+                question: 'Don\'t have an account? ',
+                actionText: 'Sign Up',
+                onActionTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                ),
+              ),
+              SizedBox(height: 24.h),
             ],
           ),
         ),

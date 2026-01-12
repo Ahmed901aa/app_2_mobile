@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onVisibilityToggle;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
+  final bool readOnly;
 
   const CustomTextField({
     super.key,
@@ -26,6 +27,7 @@ class CustomTextField extends StatelessWidget {
     this.onVisibilityToggle,
     this.validator,
     this.keyboardType,
+    this.readOnly = false,
   });
 
   @override
@@ -46,14 +48,21 @@ class CustomTextField extends StatelessWidget {
           obscureText: isPassword && !isPasswordVisible,
           validator: validator,
           keyboardType: keyboardType,
+          readOnly: readOnly,
           style: getMediumStyle(
             color: ColorManager.text,
             fontSize: FontSize.s16,
           ),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: getRegularStyle(color: ColorManager.grey),
-            prefixIcon: Icon(icon, color: ColorManager.grey),
+            hintStyle: getRegularStyle(
+              color: ColorManager.grey.withValues(alpha: 0.6),
+            ),
+            prefixIcon: Icon(
+              icon,
+              color: ColorManager.accent.withValues(alpha: 0.7),
+              size: 22.sp,
+            ),
             suffixIcon: isPassword
                 ? IconButton(
                     icon: Icon(
@@ -66,25 +75,45 @@ class CustomTextField extends StatelessWidget {
                   )
                 : null,
             filled: true,
-            fillColor: ColorManager.grey.withValues(alpha: 0.05),
+            fillColor: ColorManager.inputBackground,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 16.w,
+              vertical: 16.h,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide.none,
+              borderSide: BorderSide(
+                color: ColorManager.inputBorder,
+                width: 1,
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide.none,
+              borderSide: BorderSide(
+                color: ColorManager.inputBorder,
+                width: 1,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(
-                color: ColorManager.primary,
-                width: 1.5,
+                color: ColorManager.inputFocused,
+                width: 2,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: ColorManager.error, width: 1.5),
+              borderSide: BorderSide(
+                color: ColorManager.error,
+                width: 1.5,
+              ),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(
+                color: ColorManager.error,
+                width: 2,
+              ),
             ),
           ),
         ),

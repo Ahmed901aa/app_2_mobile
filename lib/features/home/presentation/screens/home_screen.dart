@@ -1,19 +1,16 @@
-import 'package:app_2_mobile/core/constant.dart';
-import 'package:app_2_mobile/core/resources/color_manager.dart';
-import 'package:app_2_mobile/core/resources/font_manager.dart';
-import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/core/widgets/loading_indicator.dart';
-import 'package:app_2_mobile/features/home/data/data_sources/home_api_remote_data_source.dart';
 import 'package:app_2_mobile/features/home/data/default_data.dart';
 import 'package:app_2_mobile/features/home/data/models/cuisine_model.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
+import 'package:app_2_mobile/features/home/data/services/home_data_service.dart';
+import 'package:app_2_mobile/features/home/presentation/controllers/scroll_visibility_controller.dart';
 import 'package:app_2_mobile/features/home/presentation/screens/categories_screen.dart';
 import 'package:app_2_mobile/features/home/presentation/screens/favorites_screen.dart';
 import 'package:app_2_mobile/features/home/presentation/screens/profile_screen.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/home/home_app_bar.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/home/home_bottom_nav.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/home_tab.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,63 +24,60 @@ class _HomeScreenState extends State<HomeScreen> {
   List<RecipeModel> _recipes = [];
   List<CuisineModel> _cuisines = [];
   bool _isLoading = true;
-  late final HomeApiRemoteDataSource _dataSource;
+  
+  final ScrollController _scrollController = ScrollController();
+  late final ScrollVisibilityController _visibilityController;
 
   @override
   void initState() {
     super.initState();
-    final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
-    _dataSource = HomeApiRemoteDataSource(dio);
+    _visibilityController = ScrollVisibilityController(
+      scrollController: _scrollController,
+      onVisibilityChanged: (_) {}, // Not used but required
+    );
     _loadData();
   }
 
   Future<void> _loadData() async {
-    try {
-      final recipes = await _dataSource.getRecipes();
-      final cuisines = await _dataSource.getCuisines();
+    final data = await HomeDataService.loadHomeData();
+    if (mounted) {
       setState(() {
-        _recipes = recipes;
-        _cuisines = cuisines;
+        _recipes = data.recipes;
+        _cuisines = data.cuisines;
         _isLoading = false;
       });
-    } catch (e) {
-      setState(() => _isLoading = false);
     }
+  }
+
+  @override
+  void dispose() {
+    _visibilityController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-      bottomNavigationBar: _buildBottomNav(),
+      body: NestedScrollView(
+        controller: _scrollController,
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            HomeAppBar(title: _getTitle()),
+          ];
+        },
+        body: _buildBody(),
+      ),
+      bottomNavigationBar: HomeBottomNav(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+      ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
-    final titles = ['Recipe Hub', 'Category', 'Favorites', 'Profile'];
-    return AppBar(
-      backgroundColor: ColorManager.primary,
-      elevation: 0,
-      title: Row(
-        children: [
-          Icon(
-            Icons.restaurant_menu,
-            color: ColorManager.white,
-            size: 28.sp,
-          ),
-          SizedBox(width: 8.w),
-          Text(
-            titles[_currentIndex],
-            style: getBoldStyle(
-              color: ColorManager.white,
-              fontSize: FontSize.s24,
-            ),
-          ),
-        ],
-      ),
-    );
+  String _getTitle() {
+    const titles = ['Recipe Hub', 'Category', 'Favorites', 'Profile'];
+    return titles[_currentIndex];
   }
 
   Widget _buildBody() {
@@ -107,34 +101,5 @@ class _HomeScreenState extends State<HomeScreen> {
           cuisines: _cuisines,
         );
     }
-  }
-
-  Widget _buildBottomNav() {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: (index) => setState(() => _currentIndex = index),
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: ColorManager.primary,
-      selectedItemColor: ColorManager.white,
-      unselectedItemColor: Colors.white60,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.category_outlined),
-          activeIcon: Icon(Icons.category),
-          label: 'Category',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.favorite_border),
-          activeIcon: Icon(Icons.favorite),
-          label: 'Favorites',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          activeIcon: Icon(Icons.person),
-          label: 'Profile',
-        ),
-      ],
-    );
   }
 }
