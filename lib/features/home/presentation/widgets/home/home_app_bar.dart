@@ -35,7 +35,7 @@ class HomeAppBar extends StatelessWidget {
               title,
               style: getBoldStyle(
                 color: ColorManager.white,
-                fontSize: FontSize.s20,
+                fontSize: FontSize.s16,
               ),
             ),
           ],

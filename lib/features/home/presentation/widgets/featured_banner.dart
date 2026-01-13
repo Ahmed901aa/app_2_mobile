@@ -55,7 +55,7 @@ class _FeaturedBannerState extends State<FeaturedBanner>
   }
 
   void _startAutoPlay() {
-    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
       if (widget.items.length > 1) {
         setState(() {
           _currentIndex = (_currentIndex + 1) % widget.items.length;
@@ -124,6 +124,36 @@ class _FeaturedBannerState extends State<FeaturedBanner>
                   subtitle: currentItem.subtitle,
                 ),
               ),
+              if (widget.items.length > 1)
+                Positioned(
+                  bottom: 12.h,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      widget.items.length,
+                      (index) => GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 4.w),
+                          width: _currentIndex == index ? 24.w : 8.w,
+                          height: 8.h,
+                          decoration: BoxDecoration(
+                            color: _currentIndex == index
+                                ? ColorManager.white
+                                : ColorManager.white.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
