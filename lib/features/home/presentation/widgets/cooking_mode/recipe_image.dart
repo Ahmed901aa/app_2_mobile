@@ -1,14 +1,12 @@
+import 'package:app_2_mobile/core/resources/color_manager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class RecipeImageHeader extends StatelessWidget {
+class RecipeImage extends StatelessWidget {
   final String imageUrl;
 
-  const RecipeImageHeader({
-    super.key,
-    required this.imageUrl,
-  });
+  const RecipeImage({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {

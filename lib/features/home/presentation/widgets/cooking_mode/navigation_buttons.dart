@@ -4,13 +4,13 @@ import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class StepNavigationButtons extends StatelessWidget {
+class NavigationButtons extends StatelessWidget {
   final int currentStep;
   final int totalSteps;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
 
-  const StepNavigationButtons({
+  const NavigationButtons({
     super.key,
     required this.currentStep,
     required this.totalSteps,
@@ -25,7 +25,6 @@ class StepNavigationButtons extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Previous Button
           if (currentStep > 0)
             Expanded(
               child: OutlinedButton(
@@ -45,15 +44,10 @@ class StepNavigationButtons extends StatelessWidget {
             )
           else
             const Spacer(),
-
           SizedBox(width: 16.w),
-
-          // Next Button
           Expanded(
             child: ElevatedButton(
-              onPressed: (currentStep < totalSteps - 1)
-                  ? onNext
-                  : () => Navigator.pop(context),
+              onPressed: (currentStep < totalSteps - 1) ? onNext : () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: ColorManager.primary,
                 padding: EdgeInsets.symmetric(vertical: 16.h),

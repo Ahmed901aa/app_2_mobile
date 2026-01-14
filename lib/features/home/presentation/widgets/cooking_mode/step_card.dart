@@ -2,23 +2,24 @@ import 'package:app_2_mobile/core/resources/color_manager.dart';
 import 'package:app_2_mobile/core/resources/font_manager.dart';
 import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_step.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/cooking_mode/timer_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class StepContentCard extends StatelessWidget {
+class StepCard extends StatelessWidget {
   final RecipeStep step;
   final int stepNumber;
-  final VoidCallback? onTimerTap;
   final bool isTimerRunning;
-  final String timerText;
+  final int remainingSeconds;
+  final VoidCallback onTimerTap;
 
-  const StepContentCard({
+  const StepCard({
     super.key,
     required this.step,
     required this.stepNumber,
-    this.onTimerTap,
     required this.isTimerRunning,
-    required this.timerText,
+    required this.remainingSeconds,
+    required this.onTimerTap,
   });
 
   @override
@@ -60,43 +61,11 @@ class StepContentCard extends StatelessWidget {
               ).copyWith(height: 1.5),
             ),
             SizedBox(height: 32.h),
-            if (step.isTimerRequired && step.duration > 0)
-              Center(
-                child: _buildTimerPill(),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTimerPill() {
-    return GestureDetector(
-      onTap: onTimerTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          color: ColorManager.primary,
-          borderRadius: BorderRadius.circular(30.r),
-          boxShadow: [
-            BoxShadow(
-              color: ColorManager.primary.withOpacity(0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isTimerRunning ? Icons.timer_off_outlined : Icons.timer_outlined,
-              color: Colors.white,
-            ),
-            SizedBox(width: 8.w),
-            Text(
-              timerText,
-              style: getBoldStyle(color: Colors.white, fontSize: FontSize.s16),
+            TimerButton(
+              step: step,
+              isRunning: isTimerRunning,
+              remainingSeconds: remainingSeconds,
+              onTap: onTimerTap,
             ),
           ],
         ),
