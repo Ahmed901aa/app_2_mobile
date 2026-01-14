@@ -29,7 +29,7 @@ class RecipeCardInfo extends StatelessWidget {
             style: getBoldStyle(
               color: ColorManager.text,
               fontSize: FontSize.s16,
-            ),
+            ).copyWith(height: 1.2),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -38,7 +38,7 @@ class RecipeCardInfo extends StatelessWidget {
             children: [
               Icon(
                 Icons.access_time_rounded,
-                size: 14.sp,
+                size: 16.sp,
                 color: ColorManager.grey,
               ),
               SizedBox(width: Sizes.s4.w),
@@ -53,17 +53,21 @@ class RecipeCardInfo extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(
                   horizontal: Insets.s8.w,
-                  vertical: Insets.s2.h,
+                  vertical: Insets.s4.h,
                 ),
                 decoration: BoxDecoration(
-                  color: ColorManager.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(6.r),
+                  color: _getDifficultyColor(difficulty).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(
+                    color: _getDifficultyColor(difficulty).withValues(alpha: 0.2),
+                    width: 1,
+                  ),
                 ),
                 child: Text(
                   difficulty,
-                  style: getMediumStyle(
-                    color: ColorManager.primary,
-                    fontSize: FontSize.s10,
+                  style: getSemiBoldStyle(
+                    color: _getDifficultyColor(difficulty),
+                    fontSize: FontSize.s12,
                   ),
                 ),
               ),
@@ -72,5 +76,18 @@ class RecipeCardInfo extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Color _getDifficultyColor(String difficulty) {
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return Colors.green;
+      case 'medium':
+        return Colors.orange;
+      case 'hard':
+        return Colors.red;
+      default:
+        return ColorManager.primary;
+    }
   }
 }

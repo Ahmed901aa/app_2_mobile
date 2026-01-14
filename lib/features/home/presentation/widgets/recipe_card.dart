@@ -23,42 +23,47 @@ class RecipeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: width ?? 180.w,
-        margin: margin ?? EdgeInsets.only(right: Insets.s12.w, bottom: 8.h),
-        decoration: BoxDecoration(
-          color: ColorManager.white,
+    return Container(
+      width: width ?? 180.w,
+      margin: margin ?? EdgeInsets.only(right: Insets.s12.w, bottom: 8.h),
+      decoration: BoxDecoration(
+        color: ColorManager.white,
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+            spreadRadius: -2,
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(20.r),
+        child: InkWell(
+          onTap: onTap,
           borderRadius: BorderRadius.circular(20.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-              spreadRadius: 0,
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                RecipeCardImage(imageUrl: recipe.image),
-                Positioned(
-                  top: 10.h,
-                  right: 10.w,
-                  child: RecipeRatingBadge(rating: recipe.rating),
-                ),
-              ],
-            ),
-            RecipeCardInfo(
-              title: recipe.title,
-              cookTime: recipe.cookTime,
-              difficulty: recipe.difficulty,
-            ),
-          ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
+                children: [
+                  RecipeCardImage(imageUrl: recipe.image),
+                  Positioned(
+                    top: 10.h,
+                    right: 10.w,
+                    child: RecipeRatingBadge(rating: recipe.rating),
+                  ),
+                ],
+              ),
+              RecipeCardInfo(
+                title: recipe.title,
+                cookTime: recipe.cookTime,
+                difficulty: recipe.difficulty,
+              ),
+            ],
+          ),
         ),
       ),
     );
