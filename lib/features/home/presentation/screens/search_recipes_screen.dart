@@ -1,4 +1,5 @@
 import 'package:app_2_mobile/core/constant.dart';
+import 'package:app_2_mobile/core/network/dio_factory.dart';
 import 'package:app_2_mobile/core/resources/color_manager.dart';
 import 'package:app_2_mobile/core/resources/font_manager.dart';
 import 'package:app_2_mobile/core/resources/styles_manager.dart';
@@ -28,7 +29,7 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
   @override
   void initState() {
     super.initState();
-    final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
+    final dio = DioFactory.getDio();
     final dataSource = HomeApiRemoteDataSource(dio);
     _searchService = SearchRecipesService(dataSource);
   }

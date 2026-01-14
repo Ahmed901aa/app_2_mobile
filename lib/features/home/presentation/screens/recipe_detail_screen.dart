@@ -1,5 +1,6 @@
-import 'package:app_2_mobile/core/constant.dart';
-import 'package:app_2_mobile/core/resources/color_manager.dart';
+
+import 'package:app_2_mobile/core/network/dio_factory.dart';
+
 import 'package:app_2_mobile/core/resources/values_manager.dart';
 import 'package:app_2_mobile/features/home/data/data_sources/home_api_remote_data_source.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
@@ -9,7 +10,7 @@ import 'package:app_2_mobile/features/home/presentation/widgets/recipe_detail/re
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_detail/start_cooking_button.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_image_header.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_info_section.dart';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,7 +31,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   @override
   void initState() {
     super.initState();
-    final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
+    final dio = DioFactory.getDio();
     _dataSource = HomeApiRemoteDataSource(dio);
     _loadRecipeDetails();
   }

@@ -1,4 +1,5 @@
-import 'package:app_2_mobile/core/constant.dart';
+
+import 'package:app_2_mobile/core/network/dio_factory.dart';
 import 'package:app_2_mobile/core/resources/color_manager.dart';
 import 'package:app_2_mobile/core/resources/font_manager.dart';
 import 'package:app_2_mobile/core/resources/styles_manager.dart';
@@ -9,7 +10,7 @@ import 'package:app_2_mobile/features/home/data/data_sources/home_api_remote_dat
 import 'package:app_2_mobile/features/home/data/models/cuisine_model.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_grid_view.dart';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 
 class CategoryRecipesScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _CategoryRecipesScreenState extends State<CategoryRecipesScreen> {
   @override
   void initState() {
     super.initState();
-    final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
+    final dio = DioFactory.getDio();
     _dataSource = HomeApiRemoteDataSource(dio);
     _loadRecipes();
   }

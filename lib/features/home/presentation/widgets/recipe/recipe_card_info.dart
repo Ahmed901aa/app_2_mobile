@@ -58,13 +58,17 @@ class RecipeCardInfo extends StatelessWidget {
                     : Theme.of(context).iconTheme.color?.withOpacity(0.6) ?? ColorManager.grey,
                 ),
                 SizedBox(width: Sizes.s4.w),
-                Text(
-                  '$cookTime min',
-                  style: getMediumStyle(
-                    color: isDark
-                      ? ColorManager.darkTextSecondary
-                      : Theme.of(context).textTheme.bodyMedium?.color ?? ColorManager.textSecondary,
-                    fontSize: FontSize.s12,
+                Flexible(
+                  child: Text(
+                    '$cookTime min',
+                    style: getMediumStyle(
+                      color: isDark
+                        ? ColorManager.darkTextSecondary
+                        : Theme.of(context).textTheme.bodyMedium?.color ?? ColorManager.textSecondary,
+                      fontSize: FontSize.s12,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const Spacer(),
