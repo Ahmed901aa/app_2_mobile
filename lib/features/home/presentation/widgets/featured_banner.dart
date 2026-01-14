@@ -32,7 +32,7 @@ class FeaturedBanner extends StatefulWidget {
 class _FeaturedBannerState extends State<FeaturedBanner> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _scaleAnimation;
-  late final BannerAutoPlayController _autoPlay;
+  BannerAutoPlayController? _autoPlay;
   int _currentIndex = 0;
 
   @override
@@ -49,7 +49,7 @@ class _FeaturedBannerState extends State<FeaturedBanner> with SingleTickerProvid
   @override
   void dispose() {
     _controller.dispose();
-    _autoPlay.dispose();
+    _autoPlay?.dispose();
     super.dispose();
   }
 
