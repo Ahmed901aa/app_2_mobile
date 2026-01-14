@@ -40,7 +40,7 @@ class AuthHeroSection extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  Colors.black.withValues(alpha: 0.7),
+                  Colors.black.withOpacity(0.7),
                 ],
               ),
             ),
@@ -63,7 +63,7 @@ class AuthHeroSection extends StatelessWidget {
                 Text(
                   subtitle,
                   style: getRegularStyle(
-                    color: ColorManager.white.withValues(alpha: 0.9),
+                    color: ColorManager.white.withOpacity(0.9),
                     fontSize: FontSize.s16,
                   ),
                 ),

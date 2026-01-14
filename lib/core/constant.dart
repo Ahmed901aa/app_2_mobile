@@ -1,6 +1,6 @@
 class ApiConstants {
-  static const String baseUrl = 'http://192.168.1.163:8000/api/';
-  static const String baseImageUrl = 'http://192.168.1.163:8000';
+  static const String baseUrl = 'http://172.20.10.4:8000/api/';
+  static const String baseImageUrl = 'http://172.20.10.4:8000';
   static const String apiKey =
       '05abfc2a59fb530d1db8c9b4fa89729f1121efb2b32d44badac9a7b5b98940a2';
   static const String recipesEndpoint = 'recipes';

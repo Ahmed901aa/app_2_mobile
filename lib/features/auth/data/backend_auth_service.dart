@@ -1,4 +1,4 @@
-import 'package:app_2_mobile/core/constant.dart';
+import 'package:app_2_mobile/core/network/dio_factory.dart';
 import 'package:dio/dio.dart';
 
 class BackendAuthService {
@@ -11,7 +11,7 @@ class BackendAuthService {
     return _instance;
   }
 
-  BackendAuthService._internal() : _dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
+  BackendAuthService._internal() : _dio = DioFactory.getDio();
 
   String? _authToken;
 

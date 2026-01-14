@@ -35,7 +35,7 @@ class BannerIndicators extends StatelessWidget {
               decoration: BoxDecoration(
                 color: currentIndex == index
                     ? ColorManager.white
-                    : ColorManager.white.withValues(alpha: 0.5),
+                    : ColorManager.white.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(4.r),
               ),
             ),

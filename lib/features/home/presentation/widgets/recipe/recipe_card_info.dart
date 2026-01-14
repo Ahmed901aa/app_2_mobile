@@ -56,10 +56,10 @@ class RecipeCardInfo extends StatelessWidget {
                   vertical: Insets.s4.h,
                 ),
                 decoration: BoxDecoration(
-                  color: _getDifficultyColor(difficulty).withValues(alpha: 0.1),
+                  color: _getDifficultyColor(difficulty).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8.r),
                   border: Border.all(
-                    color: _getDifficultyColor(difficulty).withValues(alpha: 0.2),
+                    color: _getDifficultyColor(difficulty).withOpacity(0.2),
                     width: 1,
                   ),
                 ),

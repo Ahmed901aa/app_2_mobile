@@ -1,12 +1,11 @@
-import 'package:app_2_mobile/core/constant.dart';
+import 'package:app_2_mobile/core/network/dio_factory.dart';
 import 'package:app_2_mobile/features/home/data/data_sources/home_api_remote_data_source.dart';
 import 'package:app_2_mobile/features/home/data/models/cuisine_model.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
-import 'package:dio/dio.dart';
 
 class HomeDataService {
   static Future<HomeData> loadHomeData() async {
-    final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
+    final dio = DioFactory.getDio();
     final dataSource = HomeApiRemoteDataSource(dio);
 
     try {
