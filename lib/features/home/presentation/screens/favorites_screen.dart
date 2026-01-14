@@ -1,5 +1,3 @@
-import 'package:app_2_mobile/core/resources/color_manager.dart';
-import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/core/widgets/loading_indicator.dart';
 import 'package:app_2_mobile/features/home/data/data_sources/home_api_remote_data_source.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
@@ -7,8 +5,8 @@ import 'package:app_2_mobile/features/home/data/services/favorites_service.dart'
 import 'package:app_2_mobile/features/home/presentation/widgets/favorites/empty_favorites_view.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/favorites/favorites_error_view.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/favorites/favorites_grid_view.dart';
+import 'package:app_2_mobile/features/home/presentation/widgets/favorites/favorites_snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -33,7 +31,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     try {
       _dataSource = await FavoritesService.createDataSource();
       final favorites = await _dataSource.getFavorites();
-      
       if (mounted) {
         setState(() {
           _favorites = favorites;
@@ -42,9 +39,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       }
     } catch (e) {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() => _isLoading = false);
       }
     }
   }
@@ -52,63 +47,20 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   Future<void> _removeFavorite(RecipeModel recipe) async {
     try {
       await _dataSource.removeFavorite(recipe.id.toString());
-      
       if (mounted) {
-        setState(() {
-          _favorites.removeWhere((r) => r.id == recipe.id);
-        });
-        
-        _showUndoSnackbar(recipe);
+        setState(() => _favorites.removeWhere((r) => r.id == recipe.id));
+        FavoritesSnackbar.showSuccess(context);
       }
     } catch (e) {
       if (mounted) {
-        _showErrorSnackbar();
+        FavoritesSnackbar.showError(context);
       }
     }
   }
 
-  void _showUndoSnackbar(RecipeModel recipe) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Removed successfully',
-          textAlign: TextAlign.center,
-          style: getRegularStyle(color: ColorManager.white),
-        ),
-        backgroundColor: ColorManager.success,
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.r),
-        ),
-        margin: EdgeInsets.only(
-          bottom: 20.h,
-          left: 50.w,
-          right: 50.w,
-        ),
-      ),
-    );
-  }
-
-  void _showErrorSnackbar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Failed to remove favorite',
-          style: getRegularStyle(color: ColorManager.white),
-        ),
-        backgroundColor: ColorManager.error,
-      ),
-    );
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(child: LoadingIndicator());
-    }
+    if (_isLoading) return const Center(child: LoadingIndicator());
 
     if (_error != null) {
       return FavoritesErrorView(
@@ -123,9 +75,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       );
     }
 
-    if (_favorites.isEmpty) {
-      return const EmptyFavoritesView();
-    }
+    if (_favorites.isEmpty) return const EmptyFavoritesView();
 
     return FavoritesGridView(
       favorites: _favorites,
