@@ -44,7 +44,7 @@ class SectionHeader extends StatelessWidget {
               Text(
                 title,
                 style: getSemiBoldStyle(
-                  color: ColorManager.text,
+                  color: Theme.of(context).textTheme.titleMedium?.color ?? ColorManager.text,
                   fontSize: FontSize.s18,
                 ),
               ),

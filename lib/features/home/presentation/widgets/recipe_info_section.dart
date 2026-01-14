@@ -22,8 +22,8 @@ class RecipeInfoSection extends StatelessWidget {
         Text(
           recipe.title,
           style: getBoldStyle(
-            color: ColorManager.text,
-            fontSize: FontSize.s24, // Keep large size but standard boldness
+            color: Theme.of(context).textTheme.titleLarge?.color ?? ColorManager.text,
+            fontSize: FontSize.s24,
           ).copyWith(height: 1.2),
         ),
         SizedBox(height: Sizes.s16.h),
@@ -31,22 +31,25 @@ class RecipeInfoSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildStatChip(
+              context,
               Icons.star_rounded,
               recipe.rating.toString(),
               ColorManager.starRate,
-              Colors.orange.withValues(alpha: 0.1),
+              Colors.orange.withOpacity(0.1),
             ),
             _buildStatChip(
+              context,
               Icons.access_time_filled_rounded,
               '${recipe.cookTime} min',
               ColorManager.primary,
-              ColorManager.primary.withValues(alpha: 0.1),
+              ColorManager.primary.withOpacity(0.1),
             ),
             _buildStatChip(
+              context,
               Icons.local_fire_department_rounded,
               recipe.difficulty,
               ColorManager.error,
-              ColorManager.error.withValues(alpha: 0.1),
+              ColorManager.error.withOpacity(0.1),
             ),
           ],
         ),
@@ -54,7 +57,7 @@ class RecipeInfoSection extends StatelessWidget {
     );
   }
 
-  Widget _buildStatChip(IconData icon, String text, Color iconColor, Color bgColor) {
+  Widget _buildStatChip(BuildContext context, IconData icon, String text, Color iconColor, Color bgColor) {
     return Expanded(
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 4.w),
@@ -70,8 +73,8 @@ class RecipeInfoSection extends StatelessWidget {
             Text(
               text,
               style: getSemiBoldStyle(
-                color: ColorManager.text,
-                fontSize: FontSize.s14,
+                color: Theme.of(context).textTheme.bodyLarge?.color ?? ColorManager.text,
+                fontSize:FontSize.s14,
               ),
               textAlign: TextAlign.center,
             ),

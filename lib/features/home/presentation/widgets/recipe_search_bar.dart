@@ -19,47 +19,87 @@ class RecipeSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Container(
       margin: EdgeInsets.symmetric(horizontal: Insets.s16.w),
       decoration: BoxDecoration(
-        color: ColorManager.white,
+        gradient: isDark
+          ? LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                ColorManager.darkSurfaceVariant,
+                ColorManager.darkSurface,
+              ],
+            )
+          : null,
+        color: isDark ? null : Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: ColorManager.primary,
-          width: 1.5,
-        ),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
+          if (isDark) ...[
+            // Outer glow
+            BoxShadow(
+              color: ColorManager.primary.withOpacity(0.2),
+              blurRadius: 12,
+              spreadRadius: 0,
+            ),
+            // Depth shadow
+            BoxShadow(
+              color: ColorManager.darkCardShadow.withOpacity(0.4),
+              blurRadius: 20,
+              offset: const Offset(0, 6),
+            ),
+          ] else ...[
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+            BoxShadow(
+              color: ColorManager.primary.withOpacity(0.05),
+              blurRadius: 20,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ],
       ),
       child: TextField(
         controller: controller,
         onChanged: onChanged,
         onTap: onTap,
-        readOnly: onTap != null, // Prevent keyboard if handling tap manually
+        readOnly: onTap != null,
         style: getRegularStyle(
-          color: ColorManager.text,
+          color: isDark 
+            ? ColorManager.darkText
+            : Theme.of(context).textTheme.bodyLarge?.color ?? ColorManager.text,
           fontSize: FontSize.s16,
         ),
         decoration: InputDecoration(
           hintText: 'Search for recipes...',
           hintStyle: getRegularStyle(
-            color: ColorManager.grey,
+            color: isDark
+              ? ColorManager.darkText.withOpacity(0.9)
+              : Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5) ?? ColorManager.grey,
             fontSize: FontSize.s14,
           ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: ColorManager.primary,
-            size: 24.sp,
+          prefixIcon: Padding(
+            padding: EdgeInsets.only(left: 8.w, right: 4.w),
+            child: Icon(
+              Icons.search,
+              color: ColorManager.primary,
+              size: 24.sp,
+            ),
           ),
-          suffixIcon: Icon(
-            Icons.tune,
-            color: ColorManager.grey,
-            size: 24.sp,
+          suffixIcon: Padding(
+            padding: EdgeInsets.only(right: 8.w, left: 4.w),
+            child: Icon(
+              Icons.tune,
+              color: isDark
+                ? ColorManager.darkText.withOpacity(0.7)
+                : Theme.of(context).iconTheme.color?.withOpacity(0.7) ?? ColorManager.grey,
+              size: 22.sp,
+            ),
           ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(

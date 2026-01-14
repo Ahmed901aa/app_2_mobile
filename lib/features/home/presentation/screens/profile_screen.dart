@@ -1,9 +1,14 @@
+import 'package:app_2_mobile/core/resources/color_manager.dart';
+import 'package:app_2_mobile/core/resources/font_manager.dart';
+import 'package:app_2_mobile/core/resources/styles_manager.dart';
 import 'package:app_2_mobile/core/resources/values_manager.dart';
 import 'package:app_2_mobile/features/home/data/services/profile_service.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_avatar.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_logout_button.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_save_button.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/profile/profile_text_field.dart';
+import 'package:app_2_mobile/features/splash/presentation/cubit/theme_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(Insets.s24.w),
         child: Form(
@@ -77,6 +82,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 label: 'Email Address',
                 icon: Icons.email_outlined,
                 readOnly: true,
+              ),
+              SizedBox(height: Sizes.s20.h),
+              BlocBuilder<ThemeCubit, ThemeMode>(
+                builder: (context, themeMode) {
+                  final isDark = themeMode == ThemeMode.dark;
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).inputDecorationTheme.fillColor,
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.1)),
+                    ),
+                    child: SwitchListTile(
+                      title: Text(
+                        "Dark Mode",
+                        style: getMediumStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color ?? ColorManager.text, 
+                          fontSize: FontSize.s16,
+                        ),
+                      ),
+                      value: isDark,
+                      onChanged: (val) {
+                        context.read<ThemeCubit>().toggleTheme();
+                      },
+                      secondary: Icon(
+                        isDark ? Icons.dark_mode : Icons.light_mode,
+                        color: ColorManager.primary,
+                      ),
+                      activeColor: ColorManager.primary,
+                    ),
+                  );
+                },
               ),
               SizedBox(height: Sizes.s40.h),
               ProfileSaveButton(

@@ -23,37 +23,53 @@ class ProfileTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: getMediumStyle(color: ColorManager.text, fontSize: FontSize.s14),
+          style: getMediumStyle(
+            color: Theme.of(context).textTheme.titleMedium?.color ?? ColorManager.text,
+            fontSize: FontSize.s14,
+          ),
         ),
         SizedBox(height: Sizes.s8.h),
         TextFormField(
           controller: controller,
           readOnly: readOnly,
           validator: validator,
-          style: getRegularStyle(color: ColorManager.text, fontSize: FontSize.s16),
+          style: getRegularStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color ?? ColorManager.text,
+            fontSize: FontSize.s16,
+          ),
           decoration: InputDecoration(
             hintText: 'Enter your $label',
-            hintStyle: getRegularStyle(color: ColorManager.grey, fontSize: FontSize.s14),
+            hintStyle: getRegularStyle(
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6) ?? ColorManager.grey,
+              fontSize: FontSize.s14,
+            ),
             prefixIcon: Icon(icon, color: ColorManager.primary),
             filled: true,
-            fillColor: readOnly ? ColorManager.lightGrey.withValues(alpha: 0.3) : ColorManager.white,
+            fillColor: readOnly
+              ? (isDark ? ColorManager.darkInputBackground.withOpacity(0.5) : ColorManager.lightGrey.withOpacity(0.3))
+              : Theme.of(context).inputDecorationTheme.fillColor,
             contentPadding: EdgeInsets.symmetric(horizontal: Insets.s16.w, vertical: Insets.s16.h),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: ColorManager.lightGrey),
+              borderSide: BorderSide(
+                color: isDark ? ColorManager.darkInputBorder : ColorManager.lightGrey,
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: ColorManager.lightGrey),
+              borderSide: BorderSide(
+                color: isDark ? ColorManager.darkInputBorder : ColorManager.lightGrey,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: ColorManager.primary),
+              borderSide: BorderSide(color: ColorManager.primary, width: 2),
             ),
           ),
         ),

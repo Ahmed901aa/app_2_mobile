@@ -27,7 +27,7 @@ class StepCard extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
-        color: ColorManager.white,
+        color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20.r),
           bottomRight: Radius.circular(20.r),
@@ -56,7 +56,7 @@ class StepCard extends StatelessWidget {
             Text(
               step.stepText.split(':').last.trim(),
               style: getRegularStyle(
-                color: ColorManager.black,
+                color: Theme.of(context).textTheme.bodyLarge?.color ?? ColorManager.black,
                 fontSize: FontSize.s18,
               ).copyWith(height: 1.5),
             ),

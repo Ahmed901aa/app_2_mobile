@@ -56,18 +56,16 @@ class _SearchRecipesScreenState extends State<SearchRecipesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.background,
       appBar: AppBar(
-        backgroundColor: ColorManager.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: ColorManager.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           'Search Recipes',
           style: getBoldStyle(
-            color: ColorManager.black,
+            color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? ColorManager.black,
             fontSize: FontSize.s18,
           ),
         ),

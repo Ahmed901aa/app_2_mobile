@@ -1,4 +1,4 @@
-import 'package:app_2_mobile/core/resources/color_manager.dart';
+
 import 'package:app_2_mobile/core/resources/values_manager.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe/recipe_card_image.dart';
@@ -27,7 +27,7 @@ class RecipeCard extends StatelessWidget {
       width: width ?? 180.w,
       margin: margin ?? EdgeInsets.only(right: Insets.s12.w, bottom: 8.h),
       decoration: BoxDecoration(
-        color: ColorManager.white,
+        color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(

@@ -22,9 +22,15 @@ class CategoryCardContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(name, style: getBoldStyle(color: ColorManager.text, fontSize: FontSize.s18)),
+                Text(name, style: getBoldStyle(
+                  color: Theme.of(context).textTheme.titleMedium?.color ?? ColorManager.text, 
+                  fontSize: FontSize.s18,
+                )),
                 SizedBox(height: Sizes.s4.h),
-                Text('Explore Collection', style: getRegularStyle(color: ColorManager.grey, fontSize: FontSize.s12)),
+                Text('Explore Collection', style: getRegularStyle(
+                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7) ?? ColorManager.grey, 
+                  fontSize: FontSize.s12,
+                )),
               ],
             ),
             Icon(Icons.arrow_forward_ios, size: 16.sp, color: ColorManager.primary),

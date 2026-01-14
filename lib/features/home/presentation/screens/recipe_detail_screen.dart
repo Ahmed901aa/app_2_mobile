@@ -60,7 +60,6 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     final recipe = _fullRecipe!;
 
     return Scaffold(
-      backgroundColor: ColorManager.background,
       floatingActionButton: StartCookingButton(recipe: recipe),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: CustomScrollView(

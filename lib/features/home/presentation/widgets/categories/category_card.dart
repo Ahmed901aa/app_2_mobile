@@ -1,4 +1,4 @@
-import 'package:app_2_mobile/core/resources/color_manager.dart';
+
 import 'package:app_2_mobile/features/home/data/models/cuisine_model.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/categories/category_card_content.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/categories/category_card_image.dart';
@@ -18,7 +18,7 @@ class CategoryCard extends StatelessWidget {
       child: Container(
         height: 100.h,
         decoration: BoxDecoration(
-          color: ColorManager.white,
+          color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(

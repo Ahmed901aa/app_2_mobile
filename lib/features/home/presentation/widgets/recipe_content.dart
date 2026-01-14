@@ -19,24 +19,24 @@ class RecipeContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader('Description'),
+        _buildSectionHeader('Description', context),
         SizedBox(height: Sizes.s8.h),
         Text(
           recipe.description,
           style: getRegularStyle(
-            color: ColorManager.textSecondary,
+            color: Theme.of(context).textTheme.bodyMedium?.color ?? ColorManager.textSecondary,
             fontSize: FontSize.s14,
           ).copyWith(height: 1.5),
         ),
-        _buildSectionHeader('Ingredients'),
+        _buildSectionHeader('Ingredients', context),
         SizedBox(height: Sizes.s12.h),
         if (recipe.ingredients.isNotEmpty)
-          _buildIngredientsList()
+          _buildIngredientsList(context)
         else
           Text(
             'No ingredients listed',
             style: getRegularStyle(
-              color: ColorManager.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7) ?? ColorManager.textSecondary,
               fontSize: FontSize.s14,
             ).copyWith(fontStyle: FontStyle.italic),
           ),
@@ -45,7 +45,7 @@ class RecipeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(String title, BuildContext context) {
     return Text(
       title,
       style: getBoldStyle(
@@ -55,7 +55,7 @@ class RecipeContent extends StatelessWidget {
     );
   }
 
-  Widget _buildIngredientsList() {
+  Widget _buildIngredientsList(BuildContext context) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -72,7 +72,7 @@ class RecipeContent extends StatelessWidget {
                 child: Icon(
                   Icons.circle,
                   size: 6.sp,
-                  color: ColorManager.textSecondary,
+                  color: Theme.of(context).iconTheme.color?.withOpacity(0.6) ?? ColorManager.textSecondary,
                 ),
               ),
               SizedBox(width: Sizes.s12.w),
@@ -80,7 +80,7 @@ class RecipeContent extends StatelessWidget {
                 child: Text(
                   recipe.ingredients[index],
                   style: getRegularStyle(
-                    color: ColorManager.text,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ?? ColorManager.text,
                     fontSize: FontSize.s14,
                   ),
                 ),

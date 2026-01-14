@@ -47,18 +47,25 @@ class _CookingStepsScreenState extends State<CookingStepsScreen> {
   Widget build(BuildContext context) {
     final steps = _steps;
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: Text('Cooking Mode', style: getBoldStyle(color: ColorManager.black, fontSize: FontSize.s18)),
-        backgroundColor: ColorManager.white,
+        title: Text(
+          'Cooking Mode',
+          style: getBoldStyle(
+            color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? ColorManager.black,
+            fontSize: FontSize.s18,
+          ),
+        ),
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(icon: Icon(Icons.close, color: ColorManager.black), onPressed: () => Navigator.pop(context)),
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.pop(context),
+        ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(4.h),
           child: LinearProgressIndicator(
             value: steps.isEmpty ? 0.0 : (_currentStep + 1) / steps.length,
-            backgroundColor: ColorManager.lightGrey,
+            backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
             valueColor: AlwaysStoppedAnimation<Color>(ColorManager.primary),
           ),
         ),
@@ -67,7 +74,13 @@ class _CookingStepsScreenState extends State<CookingStepsScreen> {
         children: [
           Padding(
             padding: EdgeInsets.all(16.sp),
-            child: Text('Step ${_currentStep + 1} of ${steps.length}', style: getMediumStyle(color: ColorManager.darkGrey, fontSize: FontSize.s16)),
+            child: Text(
+              'Step ${_currentStep + 1} of ${steps.length}',
+              style: getMediumStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7) ?? ColorManager.darkGrey,
+                fontSize: FontSize.s16,
+              ),
+            ),
           ),
           RecipeImage(imageUrl: widget.recipe.image),
           Expanded(

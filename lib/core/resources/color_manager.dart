@@ -25,4 +25,15 @@ class ColorManager {
   static Color inputBackground = const Color(0xFFF5F5F5); // Light grey for inputs
   static Color inputBorder = const Color(0xFFE0E0E0); // Border color
   static Color inputFocused = const Color.fromARGB(255, 246, 70, 70); // Focused border (accent)
+
+  // Dark Theme Colors - Modern & Vibrant
+  static Color darkBackground = const Color(0xFF0A0E27); // Deep blue-black
+  static Color darkSurface = const Color(0xFF1A1F3A); // Elevated surface
+  static Color darkSurfaceVariant = const Color(0xFF252B47); // Higher elevation
+  static Color darkText = const Color(0xFFE8E8F0); // Soft white
+  static Color darkTextSecondary = const Color(0xFF9CA3AF); // Muted gray
+  static Color darkInputBackground = const Color(0xFF1F2544); // Subtle blue-gray
+  static Color darkInputBorder = const Color(0xFF374151); // Border gray
+  static Color darkDivider = const Color(0xFF2D3548); // Divider color
+  static Color darkCardShadow = const Color(0xFF000000); // Pure black for shadows
 }

@@ -26,14 +26,14 @@ class EmptyStateWidget extends StatelessWidget {
             Icon(
               icon,
               size: 64.sp,
-              color: ColorManager.grey,
+              color: Theme.of(context).iconTheme.color?.withOpacity(0.5) ?? ColorManager.grey,
             ),
             SizedBox(height: Sizes.s16.h),
             Text(
               message,
               textAlign: TextAlign.center,
               style: getMediumStyle(
-                color: ColorManager.textSecondary,
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7) ?? ColorManager.textSecondary,
                 fontSize: FontSize.s14,
               ),
             ),

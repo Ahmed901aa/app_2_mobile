@@ -54,7 +54,6 @@ class _CategoryRecipesScreenState extends State<CategoryRecipesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.background,
       appBar: AppBar(
         title: Text(
           widget.category.name,
@@ -63,10 +62,9 @@ class _CategoryRecipesScreenState extends State<CategoryRecipesScreen> {
             fontSize: FontSize.s20,
           ),
         ),
-        backgroundColor: ColorManager.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: ColorManager.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),

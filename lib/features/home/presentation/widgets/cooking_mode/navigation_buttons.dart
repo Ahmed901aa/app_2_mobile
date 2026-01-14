@@ -31,14 +31,20 @@ class NavigationButtons extends StatelessWidget {
                 onPressed: onPrevious,
                 style: OutlinedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 16.h),
-                  side: BorderSide(color: ColorManager.darkGrey, width: 1.5),
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                    width: 1.5,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
                 child: Text(
                   'Previous Step',
-                  style: getMediumStyle(color: ColorManager.darkGrey, fontSize: FontSize.s16),
+                  style: getMediumStyle(
+                    color: Theme.of(context).textTheme.bodyLarge?.color ?? ColorManager.darkGrey,
+                    fontSize: FontSize.s16,
+                  ),
                 ),
               ),
             )
