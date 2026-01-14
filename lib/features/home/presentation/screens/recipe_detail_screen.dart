@@ -6,6 +6,8 @@ import 'package:app_2_mobile/core/widgets/loading_indicator.dart';
 import 'package:app_2_mobile/features/home/data/data_sources/home_api_remote_data_source.dart';
 import 'package:app_2_mobile/features/home/data/models/recipe_model.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_content.dart';
+import 'package:app_2_mobile/features/home/presentation/screens/cooking_steps_screen.dart';
+import 'package:app_2_mobile/core/resources/font_manager.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_image_header.dart';
 import 'package:app_2_mobile/features/home/presentation/widgets/recipe_info_section.dart';
 import 'package:dio/dio.dart';
@@ -94,12 +96,29 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
 
     return Scaffold(
       backgroundColor: ColorManager.background,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CookingStepsScreen(recipe: recipe),
+            ),
+          );
+        },
+        backgroundColor: ColorManager.primary,
+        icon: const Icon(Icons.play_arrow_rounded, color: Colors.white),
+        label: Text(
+          'Start Cooking',
+          style: getBoldStyle(color: Colors.white, fontSize: FontSize.s16),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: CustomScrollView(
         slivers: [
           RecipeImageHeader(recipe: recipe),
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(Insets.s16.sp),
+              padding: EdgeInsets.fromLTRB(Insets.s16.sp, Insets.s16.sp, Insets.s16.sp, 80.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

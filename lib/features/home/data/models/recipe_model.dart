@@ -1,3 +1,5 @@
+import 'package:app_2_mobile/features/home/data/models/recipe_step.dart';
+
 class RecipeModel {
   final String id;
   final String title;
@@ -8,6 +10,7 @@ class RecipeModel {
   final String description;
   final List<String> ingredients;
   final List<String> categoryIds;
+  final List<RecipeStep> steps;
 
   final bool isFavorite;
 
@@ -21,6 +24,7 @@ class RecipeModel {
     required this.description,
     required this.ingredients,
     required this.categoryIds,
+    this.steps = const [],
     this.isFavorite = false,
   });
 
@@ -41,6 +45,11 @@ class RecipeModel {
         (json['categories'] as List<dynamic>?)
             ?.map((e) => e['id']?.toString() ?? '')
             .where((e) => e.isNotEmpty)
+            .toList() ??
+        [],
+    steps:
+        (json['steps'] as List<dynamic>?)
+            ?.map((e) => RecipeStep.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [],
     isFavorite: json['is_favorite'] as bool? ?? false,

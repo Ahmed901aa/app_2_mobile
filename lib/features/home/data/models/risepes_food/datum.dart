@@ -1,4 +1,5 @@
 
+import 'package:app_2_mobile/features/home/data/models/recipe_step.dart';
 import 'category.dart';
 import 'cuisine.dart';
 
@@ -25,6 +26,7 @@ class Datum {
   final List<Cuisine>? cuisines;
   final List<dynamic>? dietaryTypes;
   final List<String>? ingredients;
+  final List<RecipeStep>? steps;
   final bool? isFavorite;
 
   const Datum({
@@ -50,6 +52,7 @@ class Datum {
     this.cuisines,
     this.dietaryTypes,
     this.ingredients,
+    this.steps,
     this.isFavorite,
   });
 
@@ -87,6 +90,9 @@ class Datum {
     ingredients: (json['ingredients'] as List<dynamic>?)
         ?.map((e) => e.toString())
         .toList(),
+    steps: (json['steps'] as List<dynamic>?)
+        ?.map((e) => RecipeStep.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -113,5 +119,6 @@ class Datum {
     'cuisines': cuisines?.map((e) => e.toJson()).toList(),
     'dietary_types': dietaryTypes,
     'ingredients': ingredients,
+    'steps': steps?.map((e) => e.toJson()).toList(),
   };
 }

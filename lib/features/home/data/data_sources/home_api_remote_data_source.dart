@@ -43,6 +43,7 @@ class HomeApiRemoteDataSource implements HomeRemoteDataSource {
           categoryIds:
               datum.categories?.map((e) => e.id?.toString() ?? '').toList() ??
               [],
+          steps: datum.steps ?? [],
           isFavorite: datum.isFavorite ?? false,
         );
       }).toList();
@@ -96,6 +97,7 @@ class HomeApiRemoteDataSource implements HomeRemoteDataSource {
         categoryIds:
             datum.categories?.map((e) => e.id?.toString() ?? '').toList() ??
             [],
+        steps: datum.steps ?? [],
         isFavorite: datum.isFavorite ?? false, // Mapped correctly
       );
     } catch (exception) {
@@ -163,6 +165,7 @@ class HomeApiRemoteDataSource implements HomeRemoteDataSource {
           categoryIds:
               datum.categories?.map((e) => e.id?.toString() ?? '').toList() ??
               [],
+          steps: datum.steps ?? [],
           isFavorite: true,
         );
       }).toList();
