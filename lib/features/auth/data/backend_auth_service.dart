@@ -1,4 +1,4 @@
-import 'package:app_2_mobile/core/network/dio_factory.dart';
+import 'package:app_2_mobile/core/constant.dart';
 import 'package:dio/dio.dart';
 
 class BackendAuthService {
@@ -11,7 +11,19 @@ class BackendAuthService {
     return _instance;
   }
 
-  BackendAuthService._internal() : _dio = DioFactory.getDio();
+  BackendAuthService._internal() : _dio = Dio(
+    BaseOptions(
+      baseUrl: ApiConstants.baseUrl,
+      connectTimeout: const Duration(seconds: 10), // Faster failure for auth
+      receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: const Duration(seconds: 30),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-API-Key': ApiConstants.apiKey,
+      },
+    ),
+  );
 
   String? _authToken;
 

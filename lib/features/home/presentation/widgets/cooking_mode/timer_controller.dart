@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:app_2_mobile/core/services/audio_service.dart';
 
 class TimerController extends ChangeNotifier {
   Timer? _timer;
@@ -14,6 +15,9 @@ class TimerController extends ChangeNotifier {
       stopTimer();
       return;
     }
+
+    // Play timer click sound
+    AudioService.instance.playTimerClick();
 
     _remainingSeconds = minutes * 60;
     _isTimerRunning = true;

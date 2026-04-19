@@ -60,6 +60,7 @@ dependencies:
   image_picker: ^1.2.1
   intl: ^0.19.0
   url_launcher: ^6.2.1
+  audioplayers: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/svg/
+    - assets/sounds/
 
 # Flutter Launcher Icons Configuration
 flutter_launcher_icons:

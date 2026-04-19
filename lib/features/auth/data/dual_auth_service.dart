@@ -14,17 +14,22 @@ class DualAuthService {
     );
 
     // 2. Backend Login with auto-sync fallback
+    // Non-blocking: Firebase is the primary auth. Backend failure shouldn't
+    // prevent the user from using the app.
     try {
       await _backendAuth.login(email, password);
       debugPrint('Backend login successful');
     } catch (e) {
-      debugPrint('Backend login failed: $e');
+      debugPrint('Backend login failed (non-blocking): $e');
       if (e.toString().contains('401')) {
         debugPrint('User missing on backend. Attempting auto-sync...');
-        await _syncUserToBackend(email, password);
-      } else {
-        rethrow;
+        try {
+          await _syncUserToBackend(email, password);
+        } catch (syncError) {
+          debugPrint('Auto-sync also failed (non-blocking): $syncError');
+        }
       }
+      // Don't rethrow - let the user proceed with Firebase auth only
     }
   }
 
@@ -41,6 +46,8 @@ class DualAuthService {
     );
 
     // 2. Backend Registration with login fallback
+    // Non-blocking: Firebase is the primary auth. Backend failure shouldn't
+    // prevent the user from using the app.
     try {
       await _backendAuth.register(
         name: name,
@@ -49,13 +56,16 @@ class DualAuthService {
       );
       debugPrint('Backend registration successful');
     } catch (e) {
-      debugPrint('Backend registration failed: $e');
+      debugPrint('Backend registration failed (non-blocking): $e');
       if (e.toString().contains('422') || e.toString().contains('already')) {
         debugPrint('User exists on backend. Attempting login...');
-        await _backendAuth.login(email, password);
-      } else {
-        rethrow;
+        try {
+          await _backendAuth.login(email, password);
+        } catch (loginError) {
+          debugPrint('Backend login also failed (non-blocking): $loginError');
+        }
       }
+      // Don't rethrow - let the user proceed with Firebase auth only
     }
   }
 
